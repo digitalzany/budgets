@@ -2,7 +2,7 @@ FROM python:3.10-slim
 USER root
 
 RUN apt-get -y update
-#RUN apt-get -y install gcc
+RUN apt-get -y install gcc
 
 COPY src /app
 COPY requirements.txt /app
@@ -13,8 +13,17 @@ WORKDIR /app
 
 RUN python -m pip install -r requirements.txt
 
-RUN useradd pyuser -g root
-USER pyuser
+ARG user=pyuser
+ARG group=pyuser
+ARG uid=1001
+ARG gid=1001
+RUN groupadd -g ${gid} ${group}
+RUN useradd -u ${uid} -g ${group} -s /bin/sh -m ${user} # <--- the '-m' create a user home directory
+
+RUN chown ${uid}:${gid} -R /app
+
+# Switch to user
+USER ${uid}:${gid}
 
 ENV DEBUG=true
 

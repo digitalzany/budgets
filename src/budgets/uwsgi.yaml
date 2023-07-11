@@ -1,0 +1,7 @@
+uwsgi:
+    module: budgets.wsgi
+    http: 0.0.0.0:8000
+    static-map: /static=static
+    processes: 4
+    master: 1
+    enable-threads: true

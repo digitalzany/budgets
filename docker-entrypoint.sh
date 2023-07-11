@@ -9,8 +9,9 @@ else
     echo "Starting app..."
 fi
 
-# TODO to use uWSGI
-python /app/manage.py runserver 0.0.0.0:8000
-#uwsgi --http 8000 --module=budgets.wsgi
+python manage.py collectstatic --no-input
+
+#python /app/manage.py runserver 0.0.0.0:8000
+uwsgi --yaml budgets/uwsgi.yaml
 
 exit $?
